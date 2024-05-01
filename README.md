@@ -1,5 +1,5 @@
-<H3>ENTER YOUR NAME</H3>
-<H3>ENTER YOUR REGISTER NO.</H3>
+<H3>ENTER YOUR NAME: Naramala Niharika</H3>
+<H3>ENTER YOUR REGISTER NO: 212221240031</H3>
 <H3>EX. NO.7</H3>
 <H3>DATE:</H3>
 <H1 ALIGN =CENTER>Implementation of Text  Summarization</H1>
@@ -16,13 +16,67 @@ Step 4: Define the Text Summarization Function using a simple frequency-based ap
 Step 5: Construct the main program to read the paragraph  and perform text summarization<br>
       - Generate and print the original text.<br>
       - Generate and print the text summary using the  Text Summarization function<br>
+      
 <H3>Program:</H3>
 
-Insert your code here
+```
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.stem import PorterStemmer
 
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def preprocess_text(text):
+  words = word_tokenize(text)
+  stop_words = set(stopwords.words('english'))
+  filtered_words = [word for word in words if word.lower() not in stop_words and word.isalnum()]
+
+  stemmer = PorterStemmer()
+  stemmer_words=[stemmer.stem(word) for word in filtered_words]
+
+  return stemmer_words
+
+
+def generate_summary(text,num_sentences=3):
+  sentences = sent_tokenize(text)
+
+  preprocessed_text = preprocess_text(text)
+
+  word_frequencies = nltk.FreqDist(preprocessed_text)
+
+  sentence_scores = {}
+
+  for sentence in sentences:
+    for word, freq in word_frequencies.items():
+      if word in sentence.lower():
+        if sentence not in sentence_scores:
+          sentence_scores[sentence] = freq
+        else:
+          sentence_scores[sentence] +=freq
+
+  summary_sentences = sorted(sentence_scores, key=sentence_scores.get, reverse =True)[:num_sentences]
+  return ' '.join(summary_sentences)
+
+if __name__ == "__main__":
+  input_text = "Natural language processing (NLP) is a subfield of artificial intelligence.
+	It involves the development of algorithms and models that enact NLP.
+	NLP is used in various applications, including chatbots, language Understanding, and language generation.
+	This program demonstrates a simple text summarization using NLP"
+  summary = generate_summary(input_text)
+  print("Original Text :")
+  print(input_text)
+
+  print("\nSummary")
+  print(summary)
+
+```
 <H3>Output</H3>
 
-Show your results here
+![326266573-ba6b4088-062f-4c72-89a8-6b24d4d148a6](https://github.com/naramala-niharika/Ex-7-AAI/assets/94165377/2612159c-cd69-496e-a9c9-260f18e743bb)
+
+
 
 <H3>Result:</H3>
 Thus ,the program to perform the Text summarization is executed sucessfully.
